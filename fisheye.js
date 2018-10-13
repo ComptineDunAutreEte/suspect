@@ -11,8 +11,8 @@
                 focus = [0, 0];
 
             function fisheye(d) {
-                console.log("focus0", focus[0]);
-                console.log("focus1", focus[1]);
+                //console.log("focus0", focus[0]);
+                //console.log("focus1", focus[1]);
                 var dx = d.x - focus[0],
                     dy = d.y - focus[1],
                     dd = Math.sqrt(dx * dx + dy * dy);
