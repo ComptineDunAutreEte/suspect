@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>#graph1 {
+        background-image: url("map2.jpg")
+    }
+
+    </style>
+</head>
+<body>
+<svg id="graph1"></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js" charset="utf-8"></script>
+<script src="fisheye.js"></script>
+<script src="cloudgraph.js"></script>
+<script>
+    "use strict"
+    /**
+     *  Entry point
+     */
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+
+        d3.json("data.json").then((data) => {
+            const cloud = new CloudGraph("#graph1", data, 1200, 700, d3);
+            cloud.draw();
+
+
+
+            /*console.log(data);
+
+
+
+            const svg = d3.select("#graph1")
+                .attr("width", 700)
+                .attr("height", 700);
+
+            svg.selectAll("circle")
+                .data(data.persons)
+                .enter()
+                .append("circle")
+                .attr("cx", d => d.position.x)
+                .attr("cy", d => d.position.y)
+                .attr("r", 5)
+                .attr("fill", "red");*/
+
+        });
+
+    })
+</script>
+
+
+</body>
+</html>
