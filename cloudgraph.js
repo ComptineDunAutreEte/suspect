@@ -88,18 +88,75 @@ class CloudGraph {
         // Create texts
         /*==============================Utilisation fisheye Ici=================================*/
 
-        var fisheye = d3.fisheye.circular()
-            .radius(100)
-            .distortion(8);
-        //console.log("fish eye", fisheye);
-        let b = this.xScale;
-        let c = this.yScale;
-        let circleR = this.circleR;
+        const fisheye = d3.fisheye.circular()
+            .radius(120)
+            .distortion(10);
         let rectDim = this.rectDim;
+        const xScale2 = this.xScale;
+        const yScale2 = this.yScale;
+        this.svg.on("mousemove",
+            function () {
+                fisheye.focus(d3.mouse(this));
+
+                rect.each((d) => d.fisheye = fisheye({"x":xScale2(d.position.x),"y":yScale2(d.position.y)}))
+                    .attr("x", function (d) {
+                        return d.fisheye.x;
+                    })
+                    .attr("y", function (d) {
+                        return d.fisheye.y;
+                    })
+                    .attr("width", function (d) {
+                        return d.fisheye.z*8;
+                    })
+                    .attr("height", function (d) {
+                        return d.fisheye.z*8;
+                    });
+        });
+        //var fisheye = d3.fisheye.circular()
+            //.radius(100)
+            //.distortion(8);
+        //console.log("fish eye", fisheye);
+       /* let b = this.xScale;
+        let c = this.yScale;
+       // let circleR = this.circleR;
+        let rectDim = this.rectDim;
+
+
+        const fisheye = d3.fisheye.circular()
+
+            .radius(300)
+
+            .distortion(10);
+
+        const xScale2 =
+            this.xScale;
+
+        const yScale2 =
+            this.yScale;
+
+        this.svg.on("mousemove",
+            function () {
+
+                fisheye.focus(d3.mouse(this));
+
+                circle.each(
+
+                    (d) => d.fisheye = fisheye({"x":xScale2(d.position.x),"y":yScale2(d.position.x)}))
+
+                    .attr("cx", d
+                        => d.fisheye.x)
+
+                    .attr("cy", d
+                        => d.fisheye.y)
+
+                    .attr("r", d
+                        => d.fisheye.z * 4.5);
+
+            });
         this.svg.on("mousemove", function () {
             //console.log(d3.mouse(this));
             fisheye.focus(d3.mouse(this));
-            circle.each(function (d) {
+           /* circle.each(function (d) {
                 var x = b(d.position.x);
                 var y = c(d.position.y);
                 var position = {
@@ -112,7 +169,7 @@ class CloudGraph {
             })// c'est ici les calculs mais ça ne fais rien!!!
             //ça garde la meme position des rondes de départ
                 .attr("cx", function (d) { /*console.log("fish eye", d.fisheye.x)*/
-                    ;
+                  /*  ;
                     return d.fisheye.x;
                 })
                 .attr("cy", function (d) {
@@ -120,9 +177,9 @@ class CloudGraph {
                 })
                 .attr("r", function (d) {
                     return d.fisheye.z;
-                });
+                });*/
 
-            rect.each(function (d) {
+          /*  rect.each(function (d) {
                 var x = b(d.position.x);
                 var y = c(d.position.y);
                 var position = {
@@ -144,7 +201,7 @@ class CloudGraph {
                 .attr("height", function (d) {
                     return d.fisheye.z;
                 });
-        });
+        });*/
 
         /*,role: ${d.metier}, taille: ${d.taille} age: ${d.age}, alibi: ${d.alibi}, permisArme: ${d.permisArme}, vision: ${d.vision}*/
 
