@@ -3,15 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>#graph1 {
-        background-image: url("map2.jpg")
-    }
 
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        #graph1 {
+            background-image: url("map2.jpg")
+        }
+
+        .info {
+            float: left;
+            height: 40%;
+            width: 25%;
+        }
     </style>
 </head>
 <body>
+<div>
+
+</div>
 <svg id="graph1"></svg>
+<div class="info">
+    <form>
+        <fieldset id="section-1">
+            <legend>Informations personnelles :</legend>
+            <label for="nom">Nom :</label>
+            <label id="nom"></label><br>
+            <label for="age">Age :</label>
+            <label id="age"></label><br>
+            <label for="metier">Métier :</label>
+            <label id="metier"></label><br>
+            <label for="taille">Taille :</label>
+            <label id="taille"></label><br>
+        </fieldset>
+        <fieldset id="section-2">
+            <legend>Liens :</legend>
+            <div id="liens" style="height: 150px"></div>
+        </fieldset>
+        <fieldset id="section-3">
+            <legend>Légende :</legend>
+            <svg id="legend1" height="300px"></svg>
+        </fieldset>
+        <fieldset id="section-4">
+            <legend>fonctions :</legend>
+            <div style="height: 50px">
+                <input type="checkbox" name="fisheye" value="Informatique" id="fisheye">
+                <label for="fisheye"> Fisheye</label>
+                <input type="checkbox" name="liensn" value="Informatique" id="liensn">
+                <label for="liensn"> Lien</label>
+                <input type="checkbox" name="liensf" value="Informatique" id="liensf">
+                <label for="liensf"> Lien familiale</label>
+            </div>
+        </fieldset>
+    </form>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js" charset="utf-8"></script>
+<script src="loaddata.js"></script>
+<script src="dimension.js"></script>
 <script src="fisheye.js"></script>
 <script src="cloudgraph.js"></script>
 <script>
@@ -22,14 +73,163 @@
 
 
     document.addEventListener("DOMContentLoaded", () => {
+        console.log("persons", personsList);
+        console.log("links", linksList);
+        console.log("family", familyLinksList);
+        console.log("map", linksMap);
 
+
+        /*Légende*/
+        const svgLegend = d3.select("#legend1");
+        console.log(svgLegend);
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 22)
+            .text("La victime");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 10)
+            .attr("y", 60)
+            .text("Les suspects (plus la taille d'un carré est grand");
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 10)
+            .attr("y", 75)
+            .text("plus l'alibi est faible)");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 107)
+            .text("Une vue < 5 (faible)");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 152)
+            .text("Une vue compris entre 5 et 7 (moyen)");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 192)
+            .text("Une vue >= 8 (bonne)");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 233)
+            .text("Lien normal");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 263)
+            .text("Lien familiale");
+
+        svgLegend.append("text")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "0.8em")
+            .attr("x", 50)
+            .attr("y", 297)
+            .text("Personne ayant une arme");
+
+        svgLegend.append("circle")
+            .attr("cx", 20)
+            .attr("cy", 20)
+            .attr("r", 15)
+            .attr("fill", "black");
+
+       /* svgLegend.append("rect")
+            .attr("x", 5)
+            .attr("y", 50)
+            .attr("width", 30)
+            .attr("height", 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 3).attr("fill", "white");*/
+
+
+        svgLegend.append("rect")
+            .attr("x", 5)
+            .attr("y", 90)
+            .attr("width", 30)
+            .attr("height", 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 3).attr("fill", "red");
+
+        svgLegend.append("rect")
+            .attr("x", 5)
+            .attr("y", 130)
+            .attr("width", 30)
+            .attr("height", 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 3).attr("fill", "orange");
+
+        svgLegend.append("rect")
+            .attr("x", 5)
+            .attr("y", 170)
+            .attr("width", 30)
+            .attr("height", 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 3).attr("fill", "green");
+
+        svgLegend.append("line")
+            .attr("x1", 5)
+            .attr("y1", 230)
+            .attr("x2", 35)
+            .attr("y2", 230)
+            .attr("stroke-width", 5)
+            .attr("stroke", "blue");
+
+        svgLegend.append("line")
+            .attr("x1", 5)
+            .attr("y1", 260)
+            .attr("x2", 35)
+            .attr("y2", 260)
+            .attr("stroke-width", 5)
+            .attr("stroke", "pink");
+
+        svgLegend.append("image")
+            .attr("xlink:href", "gun.png")
+            .attr("x", 5)
+            .attr("y", 280)
+            .attr("width", 30)
+            .attr("height", 30)
+        /*fin de la légende*/
 
         d3.json("data.json").then((data) => {
-            const cloud = new CloudGraph("#graph1", data, 900, 700, d3);
+            const cloud = new CloudGraph("#graph1", data, 1000, 700, d3);
             cloud.draw();
 
 
+            var checkbox = document.querySelector("input[name=fisheye]");
 
+            checkbox.addEventListener( 'change', function() {
+                FEOn = this.checked;
+            });
+
+            var liens = document.querySelector("input[name=liensn]");
+
+            liens.addEventListener( 'change', function() {
+                cloud.showAllLinks(this.checked);
+            });
+
+            var liensf = document.querySelector("input[name=liensf]");
+
+            liensf.addEventListener( 'change', function() {
+                cloud.showAllFLinks(this.checked);
+            });
             /*console.log(data);
 
 
